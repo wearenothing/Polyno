@@ -43,7 +43,7 @@ void printPoly(Poly p)
 	int flag = 0;
 	if (!p)
 	{
-		cout << "0 0" << endl;
+		cout << "0 0" ;
 		return;
 	}
 	while (p)
@@ -90,8 +90,8 @@ Poly mult(Poly p1, Poly p2)
 			{
 				if (c + rear->next->coe == 0)
 				{
-					t = rear;
-					rear = rear->next;
+					t = rear->next;
+					rear->next =t->next;
 					free(t);
 				}
 				else
@@ -163,6 +163,7 @@ int main()
 	p2= readPoly();
 	pp = mult(p1, p2);
 	printPoly(pp);
+	cout<<endl;
 	pa = addPoly(p1, p2);
 	printPoly(pa);
 	return 0;
