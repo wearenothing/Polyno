@@ -25,7 +25,10 @@ Poly AddPoly(Poly P1, Poly P2)
 	rear = (Poly)malloc(sizeof(struct PNode));
 	rear->next = NULL;
 	front = rear;
-
+	if (P1->coef == 0 && P1->expon == 0)
+		return P2;
+	else if (P2->coef == 0 && P2->expon == 0)
+		return P1;
 	while (P1&&P2)
 	{
 		if (P1->expon == P2->expon)
@@ -60,7 +63,40 @@ Poly AddPoly(Poly P1, Poly P2)
 	free(t);
 	return front;
 }
-//零多项式
+Poly MultPoly(Poly P1, Poly P2)
+{
+    if(!P1||!P2)
+    return NULL;
+	Poly P = (Poly)malloc(sizeof(struct PNode));
+	P->next = NULL;
+	
+	bool tag = false;
+	Poly t1 = P1;
+	while (t1)
+	{
+		Poly Pt = (Poly)malloc(sizeof(struct PNode));
+		Pt->next = NULL;
+		Poly rear = Pt;
+		Poly t2 = P2;
+		while (t2)
+		{
+			Attach(t1->coef*t2->coef, t1->expon + t2->expon, &rear);
+			t2 = t2->next;
+		}
+		Poly t = Pt;
+		Pt = Pt->next;
+		free(t);
+		if(tag)
+			P = AddPoly(P, Pt);
+		else
+		{
+			P = Pt;
+			tag = true;
+		}
+		t1 = t1->next;
+	}
+	return P;
+}
 void PrintPoly(Poly P)
 {
 	//int count = 0;
@@ -71,12 +107,15 @@ void PrintPoly(Poly P)
 		while (t)
 		{
 			if (!tag)
+			{
+				cout << t->coef << " " << t->expon;
 				tag = true;
+			}
 			else
-				cout <<" ";
-			cout<< t->coef << " " << t->expon;
+				cout <<" "<< t->coef << " " << t->expon;
 			t = t->next;
 		}
+		cout << endl;
 	}
 	else
 		cout << "0 0" << endl;
@@ -108,7 +147,22 @@ int main()
 	}
 	P1 = P1->next;
 	P2 = P2->next;
-	Poly P = AddPoly(P1, P2);
-	PrintPoly(P);
+	if (!P1)
+	{
+		cout << "0 0" << endl;
+		PrintPoly(P2);
+	}
+	else if (!P2)
+	{
+		cout << "0 0" << endl;
+		PrintPoly(P1);
+	}
+	else
+	{
+		Poly P = AddPoly(P1, P2);
+		Poly PP = MultPoly(P1, P2);
+		PrintPoly(PP);
+		PrintPoly(P);
+	}
 	return 0;
 }
