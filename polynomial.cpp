@@ -71,12 +71,10 @@ void PrintPoly(Poly P)
 		while (t)
 		{
 			if (!tag)
-			{
-				cout << t->coef << " " << t->expon;
 				tag = true;
-			}
 			else
-				cout <<" "<< t->coef << " " << t->expon;
+				cout <<" ";
+			cout<< t->coef << " " << t->expon;
 			t = t->next;
 		}
 	}
